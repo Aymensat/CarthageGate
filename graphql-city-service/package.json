@@ -1,0 +1,29 @@
+{
+  "name": "graphql-city-service",
+  "version": "1.0.0",
+  "description": "GraphQL microservice for City Points of Interest & Events - Smart City Platform Tunisia",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "graphql",
+    "smart-city",
+    "tunisia",
+    "microservices"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

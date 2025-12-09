@@ -1,0 +1,232 @@
+# ============================================================
+# GraphQL Schema Definition Language (SDL) Documentation
+# ============================================================
+# Service: City Points of Interest & Events
+# Protocol: GraphQL
+# Version: 1.0.0
+# 
+# This schema defines the API for managing Points of Interest (POIs)
+# and Events in a Smart City context (Tunisia).
+# 
+# Usage: This file serves as documentation. The actual schema
+# is defined in src/schema/typeDefs.js
+# ============================================================
+
+# ENUMS -------------------------------------------------------
+
+"""
+Types of events that can occur in the city
+"""
+enum EventType {
+  FESTIVAL
+  CONCERT
+  CONFERENCE
+  TOUR
+  COMMUNITY
+  MARKET
+  SPORTS
+  EXHIBITION
+}
+
+# TYPES -------------------------------------------------------
+
+"""
+Geographic coordinates for a location
+"""
+type Coordinates {
+  latitude: Float!
+  longitude: Float!
+}
+
+"""
+A zone/neighborhood in the city of Tunis
+Available zones: Ariana Center, Bab Bhar, Charguia, Jardin Thameur,
+La Goulette, La Marsa, République, Sidi Bou Said, Tunis Carthage Airport,
+Tunis Center, Tunis Marine, Bardo
+"""
+type Zone {
+  id: ID!
+  name: String!
+  description: String
+  coordinates: Coordinates
+  pointsOfInterest: [PointOfInterest!]!
+  events: [Event!]!
+}
+
+"""
+Category for points of interest
+Examples: Museum, Restaurant, Beach, Historic Site, Park, Shopping, Cafe
+"""
+type Category {
+  id: ID!
+  name: String!
+  icon: String
+  poiCount: Int!
+}
+
+"""
+A user review for a point of interest
+"""
+type Review {
+  id: ID!
+  author: String!
+  comment: String!
+  rating: Int!
+  date: String!
+}
+
+"""
+A Point of Interest (POI) - places to visit in the city
+"""
+type PointOfInterest {
+  id: ID!
+  name: String!
+  description: String
+  category: Category
+  zone: Zone
+  address: String
+  rating: Float
+  priceLevel: Int
+  openingHours: String
+  phoneNumber: String
+  imageUrl: String
+  isOpen: Boolean!
+  reviews: [Review!]!
+  reviewCount: Int!
+}
+
+"""
+An event happening in the city
+"""
+type Event {
+  id: ID!
+  title: String!
+  description: String
+  zone: Zone
+  startDate: String!
+  endDate: String!
+  time: String
+  price: Float!
+  currency: String!
+  capacity: Int
+  registeredCount: Int!
+  availableSpots: Int
+  organizer: String
+  eventType: EventType!
+  isFree: Boolean!
+  isActive: Boolean!
+}
+
+"""
+Statistics about the city's POIs and events
+"""
+type CityStats {
+  totalPOIs: Int!
+  totalEvents: Int!
+  totalZones: Int!
+  totalCategories: Int!
+  averageRating: Float!
+  upcomingEventsCount: Int!
+}
+
+# INPUT TYPES -------------------------------------------------
+
+input CreatePOIInput {
+  name: String!
+  description: String
+  categoryId: ID!
+  zoneId: ID!
+  address: String
+  priceLevel: Int
+  openingHours: String
+  phoneNumber: String
+  imageUrl: String
+}
+
+input AddReviewInput {
+  poiId: ID!
+  author: String!
+  comment: String!
+  rating: Int!
+}
+
+input CreateEventInput {
+  title: String!
+  description: String
+  zoneId: ID!
+  startDate: String!
+  endDate: String!
+  time: String
+  price: Float
+  capacity: Int
+  organizer: String
+  eventType: EventType!
+}
+
+input EventRegistrationInput {
+  eventId: ID!
+  attendeeName: String!
+  attendeeEmail: String!
+}
+
+input POIFilter {
+  zoneId: ID
+  categoryId: ID
+  minRating: Float
+  maxPriceLevel: Int
+  isOpen: Boolean
+  searchTerm: String
+}
+
+input EventFilter {
+  zoneId: ID
+  eventType: EventType
+  isFree: Boolean
+  isActive: Boolean
+  fromDate: String
+  toDate: String
+}
+
+# QUERIES -----------------------------------------------------
+
+type Query {
+  # Zone queries
+  zones: [Zone!]!
+  zone(id: ID!): Zone
+  searchZones(name: String!): [Zone!]!
+
+  # Category queries
+  categories: [Category!]!
+  category(id: ID!): Category
+
+  # POI queries
+  pointsOfInterest(filter: POIFilter, limit: Int, offset: Int): [PointOfInterest!]!
+  pointOfInterest(id: ID!): PointOfInterest
+  topRatedPOIs(limit: Int = 5): [PointOfInterest!]!
+  searchPOIs(term: String!): [PointOfInterest!]!
+
+  # Event queries
+  events(filter: EventFilter, limit: Int, offset: Int): [Event!]!
+  event(id: ID!): Event
+  upcomingEvents(limit: Int = 10): [Event!]!
+  freeEvents: [Event!]!
+
+  # Stats
+  cityStats: CityStats!
+}
+
+# MUTATIONS ---------------------------------------------------
+
+type Mutation {
+  # POI mutations
+  createPOI(input: CreatePOIInput!): PointOfInterest!
+  updatePOI(id: ID!, input: CreatePOIInput!): PointOfInterest
+  deletePOI(id: ID!): Boolean!
+  addReview(input: AddReviewInput!): PointOfInterest
+
+  # Event mutations
+  createEvent(input: CreateEventInput!): Event!
+  registerForEvent(input: EventRegistrationInput!): Event
+  cancelEvent(id: ID!): Event
+  deleteEvent(id: ID!): Boolean!
+}

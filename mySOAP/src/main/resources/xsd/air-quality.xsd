@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://example.com/air-quality-service"
+           xmlns:tns="http://example.com/air-quality-service"
+           elementFormDefault="qualified">
+
+    <!-- 
+        WHAT IS XSD?
+        ════════════
+        XSD (XML Schema Definition) defines the STRUCTURE of your SOAP messages.
+        Think of it as a "contract" - both client and server agree on this format.
+        
+        From this XSD, the jaxb2 plugin GENERATES Java classes automatically!
+    -->
+
+    <!-- Reusable complex type for air quality data -->
+    <xs:complexType name="AirQualityRecord">
+        <xs:annotation>
+            <xs:documentation>
+                Represents air quality measurements for a specific zone.
+                This type is reused in multiple response messages.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="zoneName" type="xs:string"/>
+            <xs:element name="aqi" type="xs:int"/>
+            <xs:element name="status" type="xs:string"/>
+            <xs:element name="pm10" type="xs:double"/>
+            <xs:element name="no2" type="xs:double"/>
+            <xs:element name="co2" type="xs:double"/>
+            <xs:element name="o3" type="xs:double"/>
+            <xs:element name="timestamp" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- OPERATION 1: Get Air Quality for a Single Zone                  -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    
+    <xs:element name="GetAirQualityRequest">
+        <xs:annotation>
+            <xs:documentation>
+                Request to get air quality for ONE zone.
+                Example: "Give me data for Tunis Center"
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="zoneName" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetAirQualityResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="record" type="tns:AirQualityRecord"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- OPERATION 2: Compare Two Zones                                  -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    
+    <xs:element name="CompareAirQualityRequest">
+        <xs:annotation>
+            <xs:documentation>
+                Request to compare air quality between TWO zones.
+                Example: "Compare Tunis Center vs Sidi Bou Said"
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="zone1" type="xs:string"/>
+                <xs:element name="zone2" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CompareAirQualityResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="record1" type="tns:AirQualityRecord"/>
+                <xs:element name="record2" type="tns:AirQualityRecord"/>
+                <xs:element name="verdict" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- OPERATION 3: Get All Zones (NEW - shows list capability)        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    
+    <xs:element name="GetAllZonesRequest">
+        <xs:annotation>
+            <xs:documentation>
+                Request to get ALL available zones.
+                No parameters needed.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <!-- Empty - no input needed -->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetAllZonesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- maxOccurs="unbounded" means: this can repeat many times (a list!) -->
+                <xs:element name="records" type="tns:AirQualityRecord" 
+                            maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
