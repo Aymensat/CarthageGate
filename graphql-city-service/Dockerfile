@@ -1,62 +1,34 @@
-# ============================================================ 
-# DOCKERFILE - GraphQL City Service
-# ============================================================ 
-# Multi-stage build for smaller production image
-# Stage 1: Install dependencies
-# Stage 2: Run the application
-# ============================================================ 
+# Stage 1: Build dependencies
+FROM node:20-slim AS build
 
-# Stage 1: Build stage
-FROM node:18-alpine AS builder
-
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy package files first (for better caching)
+# Copy package.json and package-lock.json for dependency installation
 COPY package*.json ./
 
-# Install ALL dependencies (including devDependencies)
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# ============================================================ 
-# Stage 2: Production stage
-FROM node:18-alpine AS production
-
-# Set working directory
-WORKDIR /app
-
-# Set NODE_ENV to production
-ENV NODE_ENV=production
-
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs \
-    && adduser -S graphql -u 1001
-
-# Copy package files
-COPY package*.json ./
-
-# Install only production dependencies
+# Install production dependencies
 RUN npm ci --only=production
 
-# Copy source code from builder
-COPY --from=builder /app/src ./src
-COPY --from=builder /app/schema.graphql ./
+# Copy all source files
+COPY . .
 
-# Change ownership to non-root user
-RUN chown -R graphql:nodejs /app
+# Stage 2: Create the final production image
+FROM node:20-slim
 
-# Switch to non-root user
-USER graphql
+# Set environment to production
+ENV NODE_ENV production
 
-# Expose the port
+# Set the working directory
+WORKDIR /app
+
+# Copy installed dependencies and source code from the build stage
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/src ./src
+COPY --from=build /app/schema.graphql ./schema.graphql
+
+# Expose the port the application runs on
 EXPOSE 4000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:4000/health || exit 1
-
-# Start the application
+# Command to run the application
 CMD ["node", "src/index.js"]
