@@ -1,29 +1,31 @@
 # Stage 1: Build the application
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Use the .NET 10.0 SDK preview image to build the project
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
 WORKDIR /src
 
-# Copy project files and restore dependencies
-COPY EmergencyGrpcService/EmergencyService/EmergencyService.csproj EmergencyGrpcService/EmergencyService/
-COPY EmergencyGrpcService/EmergencyService/Protos/ EmergencyGrpcService/EmergencyService/Protos/
-RUN dotnet restore EmergencyGrpcService/EmergencyService/EmergencyService.csproj
+# Copy the project file and restore dependencies separately to leverage Docker layer caching
+COPY *.csproj .
+RUN dotnet restore
 
-# Copy the rest of the source code and build
-COPY EmergencyGrpcService/EmergencyService/ EmergencyGrpcService/EmergencyService/
-WORKDIR /src/EmergencyGrpcService/EmergencyService
+# Copy the rest of the source code
+COPY . .
+
+# Build and publish the application for release
 RUN dotnet publish -c Release -o /app/publish --no-restore
 
 # Stage 2: Create the final runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+# Use the smaller ASP.NET 10.0 runtime preview image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS final
 WORKDIR /app
 
 # Copy the published output from the build stage
 COPY --from=build /app/publish .
 
-# Expose the gRPC port
+# Expose the port for unencrypted gRPC traffic.
 EXPOSE 5001
 
-# Set the URL for the ASP.NET Core application to listen on
+# Configure the app to listen on the exposed port.
 ENV ASPNETCORE_URLS=http://+:5001
 
-# Run the application
+# Set the entrypoint for the container
 ENTRYPOINT ["dotnet", "EmergencyService.dll"]

@@ -24,6 +24,7 @@ import express from 'express';
 // Apollo Server - GraphQL server implementation
 
 import { ApolloServer } from '@apollo/server';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 
 
@@ -84,6 +85,11 @@ async function startServer() {
     // Introspection allows tools to discover the schema
     // Enable in development, might disable in production
     introspection: true,
+
+    // Enable the landing page in all environments
+    plugins: [
+      ApolloServerPluginLandingPageLocalDefault(),
+    ],
     
     // Format errors for better debugging
     formatError: (error) => {

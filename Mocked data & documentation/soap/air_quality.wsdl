@@ -1,0 +1,162 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://example.com/air-quality-service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://example.com/air-quality-service" targetNamespace="http://example.com/air-quality-service">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://example.com/air-quality-service">
+<!--  
+        WHAT IS XSD?
+        ════════════
+        XSD (XML Schema Definition) defines the STRUCTURE of your SOAP messages.
+        Think of it as a "contract" - both client and server agree on this format.
+        
+        From this XSD, the jaxb2 plugin GENERATES Java classes automatically!
+     -->
+<!--  Reusable complex type for air quality data  -->
+<xs:complexType name="AirQualityRecord">
+<xs:annotation>
+<xs:documentation> Represents air quality measurements for a specific zone. This type is reused in multiple response messages. </xs:documentation>
+</xs:annotation>
+<xs:sequence>
+<xs:element name="zoneName" type="xs:string"/>
+<xs:element name="aqi" type="xs:int"/>
+<xs:element name="status" type="xs:string"/>
+<xs:element name="pm10" type="xs:double"/>
+<xs:element name="no2" type="xs:double"/>
+<xs:element name="co2" type="xs:double"/>
+<xs:element name="o3" type="xs:double"/>
+<xs:element name="timestamp" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<!--  ═══════════════════════════════════════════════════════════════  -->
+<!--  OPERATION 1: Get Air Quality for a Single Zone                   -->
+<!--  ═══════════════════════════════════════════════════════════════  -->
+<xs:element name="GetAirQualityRequest">
+<xs:annotation>
+<xs:documentation> Request to get air quality for ONE zone. Example: "Give me data for Tunis Center" </xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="zoneName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="GetAirQualityResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="record" type="tns:AirQualityRecord"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<!--  ═══════════════════════════════════════════════════════════════  -->
+<!--  OPERATION 2: Compare Two Zones                                   -->
+<!--  ═══════════════════════════════════════════════════════════════  -->
+<xs:element name="CompareAirQualityRequest">
+<xs:annotation>
+<xs:documentation> Request to compare air quality between TWO zones. Example: "Compare Tunis Center vs Sidi Bou Said" </xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="zone1" type="xs:string"/>
+<xs:element name="zone2" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="CompareAirQualityResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="record1" type="tns:AirQualityRecord"/>
+<xs:element name="record2" type="tns:AirQualityRecord"/>
+<xs:element name="verdict" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<!--  ═══════════════════════════════════════════════════════════════  -->
+<!--  OPERATION 3: Get All Zones (NEW - shows list capability)         -->
+<!--  ═══════════════════════════════════════════════════════════════  -->
+<xs:element name="GetAllZonesRequest">
+<xs:annotation>
+<xs:documentation> Request to get ALL available zones. No parameters needed. </xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<!--  Empty - no input needed  -->
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="GetAllZonesResponse">
+<xs:complexType>
+<xs:sequence>
+<!--  maxOccurs="unbounded" means: this can repeat many times (a list!)  -->
+<xs:element maxOccurs="unbounded" name="records" type="tns:AirQualityRecord"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="GetAllZonesResponse">
+<wsdl:part element="tns:GetAllZonesResponse" name="GetAllZonesResponse"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="GetAirQualityResponse">
+<wsdl:part element="tns:GetAirQualityResponse" name="GetAirQualityResponse"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="GetAllZonesRequest">
+<wsdl:part element="tns:GetAllZonesRequest" name="GetAllZonesRequest"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="CompareAirQualityResponse">
+<wsdl:part element="tns:CompareAirQualityResponse" name="CompareAirQualityResponse"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="CompareAirQualityRequest">
+<wsdl:part element="tns:CompareAirQualityRequest" name="CompareAirQualityRequest"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="GetAirQualityRequest">
+<wsdl:part element="tns:GetAirQualityRequest" name="GetAirQualityRequest"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="AirQualityPort">
+<wsdl:operation name="GetAllZones">
+<wsdl:input message="tns:GetAllZonesRequest" name="GetAllZonesRequest"> </wsdl:input>
+<wsdl:output message="tns:GetAllZonesResponse" name="GetAllZonesResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetAirQuality">
+<wsdl:input message="tns:GetAirQualityRequest" name="GetAirQualityRequest"> </wsdl:input>
+<wsdl:output message="tns:GetAirQualityResponse" name="GetAirQualityResponse"> </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CompareAirQuality">
+<wsdl:input message="tns:CompareAirQualityRequest" name="CompareAirQualityRequest"> </wsdl:input>
+<wsdl:output message="tns:CompareAirQualityResponse" name="CompareAirQualityResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="AirQualityPortSoap11" type="tns:AirQualityPort">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="GetAllZones">
+<soap:operation soapAction=""/>
+<wsdl:input name="GetAllZonesRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="GetAllZonesResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetAirQuality">
+<soap:operation soapAction=""/>
+<wsdl:input name="GetAirQualityRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="GetAirQualityResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CompareAirQuality">
+<soap:operation soapAction=""/>
+<wsdl:input name="CompareAirQualityRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="CompareAirQualityResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="AirQualityPortService">
+<wsdl:port binding="tns:AirQualityPortSoap11" name="AirQualityPortSoap11">
+<soap:address location="http://localhost:8081/ws"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

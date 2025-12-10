@@ -1,0 +1,20 @@
+# Commands to build and run the Docker container for the Emergency gRPC Service
+
+# 1. Build the Docker image
+# This command builds the image from the Dockerfile in the current directory
+# and tags it with the name "emergency-service".
+docker build -t emergency-service .
+
+# 2. Run the Docker container
+# This command starts a container from the "emergency-service" image.
+# -d: Runs the container in detached mode (in the background).
+# -p 5001:5001: Maps port 5001 on your machine to port 5001 in the container.
+# --name emergency-grpc-service: Gives the container a memorable name.
+docker run -d -p 5001:5001 --name emergency-grpc-service emergency-service
+
+# To see the container logs:
+docker logs emergency-grpc-service
+
+# To stop and remove the container:
+docker stop emergency-grpc-service
+docker rm emergency-grpc-service

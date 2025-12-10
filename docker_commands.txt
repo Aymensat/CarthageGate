@@ -1,0 +1,23 @@
+____
+SOAP
+
+docker run -p 8081:8081 soap-air-quality-service
+OR
+docker run --name my-soap-app -d -p 8081:8081 soap-air-quality-service
+
+
+H2:jdbc:h2:file:/app/data/airquality
+____
+Rest
+
+docker run -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/my_rest_db -e SPRING_DATASOURCE_USERNAME=postgres -e
+
+___
+.NET
+
+docker run -d -p 5001:5001 -e "ASPNETCORE_ENVIRONMENT=Development" --name emergency-grpc-service emergency-service
+
+
+___
+.GraphQL
+docker run -p 4000:4000 graphql-city-service

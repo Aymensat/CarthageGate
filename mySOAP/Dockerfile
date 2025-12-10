@@ -28,8 +28,11 @@ WORKDIR /app
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/soap-air-quality-service-1.0.0.jar /app/soap-air-quality-service.jar
 
+RUN mkdir -p /app/data
+VOLUME /app/data
+
 # Expose the port the application runs on
-EXPOSE 8080
+EXPOSE 8081
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "/app/soap-air-quality-service.jar"]
