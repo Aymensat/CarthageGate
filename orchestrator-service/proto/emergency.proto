@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option csharp_namespace = "EmergencyService";
+
+package emergency;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// ============== ENUMS ==============
+
+enum AlertType {
+  ALERT_TYPE_UNSPECIFIED = 0;
+  FIRE = 1;
+  ACCIDENT = 2;
+  MEDICAL = 3;
+  SECURITY = 4;
+  OTHER = 5;
+}
+
+enum AlertStatus {
+  ALERT_STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  IN_PROGRESS = 2;
+  RESOLVED = 3;
+  CANCELLED = 4;
+}
+
+// ============== MESSAGES ==============
+
+message Alert {
+  string id = 1;
+  AlertType type = 2;
+  string zone = 3;
+  string description = 4;
+  AlertStatus status = 5;
+  double latitude = 6;
+  double longitude = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  string reporter_phone = 10;
+}
+
+// Request/Response messages
+
+message CreateAlertRequest {
+  AlertType type = 1;
+  string zone = 2;
+  string description = 3;
+  double latitude = 4;
+  double longitude = 5;
+  string reporter_phone = 6;
+}
+
+message CreateAlertResponse {
+  Alert alert = 1;
+  string message = 2;
+}
+
+message GetAlertRequest {
+  string id = 1;
+}
+
+message GetAlertResponse {
+  Alert alert = 1;
+}
+
+message GetAlertsByZoneRequest {
+  string zone = 1;
+  AlertStatus status_filter = 2;  // optional: filter by status
+}
+
+message GetAlertsByZoneResponse {
+  repeated Alert alerts = 1;
+  int32 total_count = 2;
+}
+
+message UpdateAlertStatusRequest {
+  string id = 1;
+  AlertStatus new_status = 2;
+}
+
+message UpdateAlertStatusResponse {
+  Alert alert = 1;
+  string message = 2;
+}
+
+message StreamAlertsRequest {
+  string zone = 1;  // empty = all zones
+}
+
+// ============== SERVICE ==============
+
+service EmergencyAlertService {
+  // Unary RPCs
+  rpc CreateAlert(CreateAlertRequest) returns (CreateAlertResponse);
+  rpc GetAlert(GetAlertRequest) returns (GetAlertResponse);
+  rpc GetAlertsByZone(GetAlertsByZoneRequest) returns (GetAlertsByZoneResponse);
+  rpc UpdateAlertStatus(UpdateAlertStatusRequest) returns (UpdateAlertStatusResponse);
+  
+  // Server Streaming RPC - real-time alerts
+  rpc StreamAlerts(StreamAlertsRequest) returns (stream Alert);
+}

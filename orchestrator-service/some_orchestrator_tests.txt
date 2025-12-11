@@ -1,0 +1,60 @@
+  Test Case 1: Tunis Center to Charguia (Metro)
+
+  This should show metro transport options.
+   - Request Body:
+   1     {
+   2       "startZone": "Tunis Center",
+   3       "destinationZone": "Charguia"
+   4     }
+
+  Test Case 2: Tunis Center to La Goulette (TGM Train)
+
+  This should show TGM train options.
+   - Request Body:
+
+   1     {
+   2       "startZone": "Tunis Center",
+   3       "destinationZone": "La Goulette"
+   4     }
+
+  Test Case 3: La Goulette to Sidi Bou Said (TGM Train)
+
+  This should show TGM train options.
+   - Request Body:
+
+   1     {
+   2       "startZone": "La Goulette",
+   3       "destinationZone": "Sidi Bou Said"
+   4     }
+
+  Test Case 4: Sidi Bou Said to La Marsa (TGM Train)
+
+  This should show TGM train options.
+   - Request Body:
+
+   1     {
+   2       "startZone": "Sidi Bou Said",
+   3       "destinationZone": "La Marsa"
+   4     }
+
+  Test Case 5: Tunis Center to Ariana (Bus)
+
+  This should show bus transport options.
+   - Request Body:
+
+   1     {
+   2       "startZone": "Tunis Center",
+   3       "destinationZone": "Ariana"
+   4     }
+
+  Test Case 6: Ariana to Tunis Carthage Airport (Bus)
+
+  This should show bus transport options.
+   - Request Body:
+
+   1     {
+   2       "startZone": "Ariana",
+   3       "destinationZone": "Tunis Carthage Airport"
+   4     }
+
+  ---
