@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # REST Service (Spring Boot)
+  rest-service:
+    build: ./myRest
+    container_name: rest-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/my_rest_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=aymen
+    depends_on:
+      - postgres-db
+
+  # SOAP Service (Spring Boot)
+  soap-service:
+    build: ./mySOAP
+    container_name: soap-service
+    ports:
+      - "8081:8081"
+
+  # gRPC Service (.NET)
+  grpc-service:
+    build: ./EmergencyGrpcService/EmergencyService
+    container_name: grpc-service
+    ports:
+      - "5001:5001"
+      - "5000:5000" # Also expose the non-TLS port if needed
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  # GraphQL Service (Node.js)
+  graphql-service:
+    build: ./graphql-city-service
+    container_name: graphql-service
+    ports:
+      - "4000:4000"
+
+  # Orchestrator Service (Node.js)
+  orchestrator:
+    build: ./orchestrator-service
+    container_name: orchestrator-service
+    ports:
+      - "3000:3000"
+    environment:
+      - AIR_QUALITY_SERVICE_HOST=soap-service
+      - AIR_QUALITY_SERVICE_PORT=8081
+      - MOBILITY_SERVICE_HOST=rest-service
+      - MOBILITY_SERVICE_PORT=8080
+      - EMERGENCY_SERVICE_HOST=grpc-service
+      - EMERGENCY_SERVICE_PORT=5001
+    depends_on:
+      - rest-service
+      - soap-service
+      - grpc-service
+      - graphql-service # Orchestrator depends on GraphQL if it uses it.
+
+  # PostgreSQL Database for REST Service
+  postgres-db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=my_rest_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=aymen
+    # No volumes for persistence, database will be ephemeral
+
