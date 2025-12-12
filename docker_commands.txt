@@ -1,9 +1,9 @@
 ____
 SOAP ( spring + h2)
 
-docker run -p 8081:8081 soap-air-quality-service
+docker run -p 8081:8081 projetsoc-soap-service 
 OR
-docker run --name my-soap-app -d -p 8081:8081 soap-air-quality-service
+docker run --name my-soap-app -d -p 8081:8081 projetsoc-soap-service 
 
 
 H2:jdbc:h2:file:/app/data/airquality
@@ -13,15 +13,15 @@ Rest ( spring + postges)
 
 
 aprament hadhi, 
- docker run -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/my_rest_db -e SPRING_DATASOURCE_USERNAME=postgres -e SPRING_DATASOURCE_PASSWORD=aymen aymensat/carthagegate-rest:latest
+ docker run -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/my_rest_db -e SPRING_DATASOURCE_USERNAME=postgres -e SPRING_DATASOURCE_PASSWORD=aymen projetsoc-rest-service
 
 
 ___
 grpc .NET (in memory)
 
-docker run -d -p 5001:5001 -e "ASPNETCORE_ENVIRONMENT=Development" --name emergency-grpc-service emergency-service
+docker run -d -p 5001:5001 -e "ASPNETCORE_ENVIRONMENT=Development" --name emergency-grpc-service projetsoc-grpc-service
 
 
 ___
 .GraphQL express.js ( in memory) 
-docker run -p 4000:4000 graphql-city-service
+docker run -p 4000:4000 projetsoc-graphql-service

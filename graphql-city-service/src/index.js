@@ -82,6 +82,9 @@ async function startServer() {
     // The resolver functions
     resolvers,
     
+    // Disable CSRF prevention for this project to allow proxying
+    csrfPrevention: false,
+
     // Introspection allows tools to discover the schema
     // Enable in development, might disable in production
     introspection: true,
