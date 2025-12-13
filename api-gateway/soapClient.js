@@ -1,6 +1,6 @@
 const soap = require('soap');
 
-const WSDL_URL = 'http://localhost:8081/ws/airQuality.wsdl'; // TEMPORARY: Using localhost for testing against locally running Docker services
+const WSDL_URL = 'http://soap-service:8081/ws/airQuality.wsdl';
 
 let soapClient = null;
 

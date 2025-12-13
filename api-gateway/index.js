@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 // TEMPORARY: Using localhost for testing against locally running Docker services
 app.use(
   "/mobility",
-  proxy("http://localhost:8080", {
+  proxy("http://rest-service:8080", {
     proxyReqPathResolver: function (req) {
       console.log(`Resolving path for /mobility: original path = ${req.path}`);
       if (req.path === "/api-docs") {
@@ -43,7 +43,7 @@ app.use(
 // TEMPORARY: Using localhost for testing against locally running Docker services
 app.use(
   "/graphql",
-  proxy("http://localhost:4000", {
+  proxy("http://graphql-service:4000", {
     proxyReqPathResolver: function (req) {
       console.log(`[GraphQL Proxy] Resolving for: ${req.originalUrl}`);
       return "/graphql"; // Explicitly send all /graphql gateway requests to /graphql on the backend
@@ -61,7 +61,7 @@ app.use("/air-quality", airQualityRoutes);
 // TEMPORARY: Using localhost for testing against locally running Docker services
 app.use(
   "/orchestrator",
-  proxy("http://localhost:3000", {
+  proxy("http://orchestrator:3000", {
     proxyReqPathResolver: function (req) {
       return `/api${req.path}`;
     },

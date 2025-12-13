@@ -6,7 +6,7 @@ services:
     build: ./api-gateway
     container_name: api-gateway
     ports:
-      - "5000:5000"
+      - "3001:3001"
     depends_on:
       - rest-service
       - soap-service

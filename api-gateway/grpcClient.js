@@ -3,7 +3,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 const PROTO_PATH = path.join(__dirname, 'proto', 'emergency.proto');
-const GRPC_SERVER_ADDRESS = 'localhost:5001'; // TEMPORARY: Using localhost for testing against locally running Docker services
+const GRPC_SERVER_ADDRESS = 'grpc-service:5001';
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
