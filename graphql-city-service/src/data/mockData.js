@@ -248,8 +248,8 @@ export let events = [
     title: "Carthage International Festival",
     description: "Annual music and arts festival at the Roman amphitheater",
     zoneId: "zone-8",
-    startDate: "2025-07-10",
-    endDate: "2025-08-20",
+    startDate: "2026-07-10", // Future date
+    endDate: "2026-08-20",
     time: "21:00",
     price: 50.0,
     currency: "TND",
@@ -265,8 +265,8 @@ export let events = [
     title: "Medina Heritage Walk",
     description: "Guided tour through the historic Medina",
     zoneId: "zone-2",
-    startDate: "2025-06-15",
-    endDate: "2025-06-15",
+    startDate: "2025-12-20", // Future date
+    endDate: "2025-12-20",
     time: "10:00",
     price: 0,
     currency: "TND",
@@ -282,7 +282,7 @@ export let events = [
     title: "La Marsa Beach Cleanup",
     description: "Community event to clean the beach",
     zoneId: "zone-6",
-    startDate: "2025-06-01",
+    startDate: "2025-06-01", // Past date
     endDate: "2025-06-01",
     time: "08:00",
     price: 0,
@@ -292,15 +292,15 @@ export let events = [
     organizer: "Green Tunisia NGO",
     eventType: "COMMUNITY",
     isFree: true,
-isActive: true
+    isActive: true
   },
   {
     id: "evt-4",
     title: "Tech Startup Conference",
     description: "Annual tech conference for Tunisian startups",
     zoneId: "zone-3",
-    startDate: "2025-09-20",
-    endDate: "2025-09-22",
+    startDate: "2026-01-15", // Future date
+    endDate: "2026-01-17",
     time: "09:00",
     price: 120.0,
     currency: "TND",
@@ -316,8 +316,8 @@ isActive: true
     title: "Ramadan Night Market",
     description: "Special night market during Ramadan",
     zoneId: "zone-10",
-    startDate: "2025-03-01",
-    endDate: "2025-03-30",
+    startDate: "2026-02-20", // Future date
+    endDate: "2026-03-22",
     time: "20:00",
     price: 0,
     currency: "TND",
