@@ -47,9 +47,9 @@ const MobilityDashboard: React.FC = () => {
         <div className="space-y-4">
           {transportLines.map((line) => (
             <div key={line.id} className="p-3 bg-gray-700 rounded-md">
-              <h3 className="text-xl font-bold text-white">{line.name} ({line.type})</h3>
-              <p className={`text-sm ${line.status === 'GOOD' ? 'text-green-300' : line.status === 'DELAYED' ? 'text-yellow-300' : 'text-red-300'}`}>
-                Status: {line.status}
+              <h3 className="text-xl font-bold text-white">{line.name} ({line.lineType})</h3>
+              <p className={`text-sm ${line.lineStatus === 'GOOD' ? 'text-green-300' : line.lineStatus === 'DELAYED' ? 'text-yellow-300' : 'text-red-300'}`}>
+                Status: {line.lineStatus}
               </p>
               {line.description && <p className="text-gray-400 text-sm mt-1">{line.description}</p>}
             </div>

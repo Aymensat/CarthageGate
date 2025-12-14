@@ -3,8 +3,8 @@ import api from './api';
 export interface TransportLine {
   id: string;
   name: string;
-  type: 'BUS' | 'TRAIN' | 'METRO';
-  status: 'GOOD' | 'DELAYED' | 'CANCELLED';
+  lineType: 'BUS' | 'TRAIN' | 'METRO'; // Changed from 'type'
+  lineStatus: 'GOOD' | 'DELAYED' | 'CANCELLED'; // Changed from 'status'
   description?: string;
 }
 

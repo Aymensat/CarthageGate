@@ -81,3 +81,13 @@ services:
       - POSTGRES_PASSWORD=aymen
     volumes:
       - ./Mocked data & documentation/rest/data.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Web Client (React/Nginx)
+  web-client:
+    build:
+      context: ./web-client
+    container_name: web-client
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway

@@ -6,7 +6,7 @@ const EmergencyDashboard: React.FC = () => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedZone, setSelectedZone] = useState<string>('La Marsa'); // Default zone
+  const [selectedZone] = useState<string>('La Marsa'); // Default zone
 
   useEffect(() => {
     const fetchAlerts = async () => {
@@ -66,12 +66,13 @@ const EmergencyDashboard: React.FC = () => {
       ) : (
         <div className="space-y-4">
           {alerts.map((alert) => (
-            <div key={alert.id} className="p-3 bg-gray-700 rounded-md">
+            <div className="p-3 bg-gray-700 rounded-md">
               <h3 className="text-xl font-bold text-white">{alert.type} - {alert.zone}</h3>
               <p className="text-sm">Description: {alert.description}</p>
-              <p className={`text-sm font-bold ${getStatusColor(alert.status)}`}>
-                Status: {alert.status}
-              </p>
+              <div className="text-sm flex items-center">
+                <p>Status: </p>
+                <p className={`font-bold ml-2 ${getStatusColor(alert.status)}`}>{alert.status}</p>
+              </div>
             </div>
           ))}
         </div>

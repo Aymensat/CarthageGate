@@ -73,7 +73,7 @@ const AirQualityDashboard: React.FC = () => {
           id="zone-select"
           value={selectedZone}
           onChange={(e) => setSelectedZone(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600"
+          className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline border-gray-600 hover:border-gray-500"
         >
           {zones.map((zone) => (
             <option key={zone} value={zone}>{zone}</option>
