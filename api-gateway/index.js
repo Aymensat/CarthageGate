@@ -71,10 +71,11 @@ app.use(
 // Proxy for Chatbot Service
 app.use(
   "/chat",
-  proxy("http://chatbot-service:8000", {
+  proxy("http://host.docker.internal:8000", {
     proxyReqPathResolver: function (req) {
-      console.log(`[Chatbot Proxy] Forwarding request to chatbot-service: ${req.url}`);
-      return req.url;
+      const newPath = '/chat';
+      console.log(`[Chatbot Proxy] Forwarding request from ${req.originalUrl} to chatbot-service at ${newPath}`);
+      return newPath;
     },
   })
 );
