@@ -68,6 +68,17 @@ app.use(
   })
 );
 
+// Proxy for Chatbot Service
+app.use(
+  "/chat",
+  proxy("http://chatbot-service:8000", {
+    proxyReqPathResolver: function (req) {
+      console.log(`[Chatbot Proxy] Forwarding request to chatbot-service: ${req.url}`);
+      return req.url;
+    },
+  })
+);
+
 app.listen(port, () => {
   console.log(`API Gateway listening at http://localhost:${port}`);
 });
